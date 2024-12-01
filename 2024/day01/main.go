@@ -9,18 +9,19 @@ import (
 	"slices"
 )
 
-func readTextFile(path string) string { 
+func readTextFile(path string) (string, error) { 
+	// read a text file
 	data, err := os.ReadFile(path)
 
 	if err != nil {
-		log.Fatal(err)
+		return "", err
 	}
 
-	return string(data)
+	return string(data), nil
 }
 
-func splitTwoLists(data string) (list1, list2 []int) {
-	// split the data into lines
+func parseDataToLists(data string) ([]int, []int, error) {
+	var li1, li2 []int
 	lines := strings.Split(data, "\n")
 
 	// for line in lines
@@ -30,16 +31,22 @@ func splitTwoLists(data string) (list1, list2 []int) {
 
 		if found {
 			// convert the two parts into integers and append them to the lists
-			if aInt, err := strconv.Atoi(a); err == nil {
-				list1 = append(list1, aInt)
-			}	
-			if bInt, err := strconv.Atoi(b); err == nil {
-				list2 = append(list2, bInt)
+			aInt, err := strconv.Atoi(a)
+			if err != nil {
+				return nil, nil, err
 			}
+
+			bInt, err := strconv.Atoi(b)
+			if err != nil {
+				return nil, nil, err
+			}
+
+			li1 = append(li1, aInt)
+			li2 = append(li2, bInt)
 		}
 	}
 
-	return
+	return li1, li2, nil
 }
 
 func calculateDistance(l1, l2 []int) (dist int) {
@@ -66,8 +73,7 @@ func similarityScore(l1, l2 []int) (score int) {
 	return
 }
 
-/* generic function that counts the occurrences of elements that meet 
-	given condition in a given slice */
+// counts the occurences of elements that meet a given condition in a slice 
 func count[T any](slice []T, f func(T) bool) (count int) {
 	for _, s := range slice {
 		if f(s) {
@@ -78,13 +84,20 @@ func count[T any](slice []T, f func(T) bool) (count int) {
 }
 
 func main() {
-	lists := readTextFile("input.txt")
-	list1, list2 := splitTwoLists(lists)
+	filePath := "input.txt"
+	data, err := readTextFile(filePath)
+	if err != nil {
+		log.Fatalf("Failed to read file: %v", err)
+	}
+
+	list1, list2, err := parseDataToLists(data)
+    if err != nil {
+        log.Fatalf("Failed to parse data: %v", err)
+	}
 
 	slices.Sort(list1)
 	slices.Sort(list2)
 
 	fmt.Println(calculateDistance(list1, list2))
-
 	fmt.Println(similarityScore(list1, list2))
 }
