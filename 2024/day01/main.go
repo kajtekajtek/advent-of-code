@@ -54,6 +54,29 @@ func calculateDistance(l1, l2 []int) (dist int) {
 	return
 }
 
+
+/* similarity score = sum of each number from the left list multiplied by 
+	the number of times it appears in the right list */
+func similarityScore(l1, l2 []int) (score int) {
+	for _, num := range l1 {
+		score += num * count(l2, func(n int) bool {
+				return num == n
+		})
+	}	
+	return
+}
+
+/* generic function that counts the occurrences of elements that meet 
+	given condition in a given slice */
+func count[T any](slice []T, f func(T) bool) (count int) {
+	for _, s := range slice {
+		if f(s) {
+			count++
+		}
+	}
+	return
+}
+
 func main() {
 	lists := readTextFile("input.txt")
 	list1, list2 := splitTwoLists(lists)
@@ -62,4 +85,6 @@ func main() {
 	slices.Sort(list2)
 
 	fmt.Println(calculateDistance(list1, list2))
+
+	fmt.Println(similarityScore(list1, list2))
 }
