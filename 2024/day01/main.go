@@ -3,22 +3,12 @@ package main
 import (
 	"fmt"
 	"log"
-	"os"
 	"strings"
 	"strconv"
 	"slices"
+
+	"github.com/kajtekajtek/advent-of-code/2024/utils"
 )
-
-func readTextFile(path string) (string, error) { 
-	// read a text file
-	data, err := os.ReadFile(path)
-
-	if err != nil {
-		return "", err
-	}
-
-	return string(data), nil
-}
 
 func parseDataToLists(data string) ([]int, []int, error) {
 	var li1, li2 []int
@@ -61,31 +51,20 @@ func calculateDistance(l1, l2 []int) (dist int) {
 	return
 }
 
-
 /* similarity score = sum of each number from the left list multiplied by 
 	the number of times it appears in the right list */
 func similarityScore(l1, l2 []int) (score int) {
 	for _, num := range l1 {
-		score += num * count(l2, func(n int) bool {
+		score += num * utils.Count(l2, func(n int) bool {
 				return num == n
 		})
 	}	
 	return
 }
 
-// counts the occurences of elements that meet a given condition in a slice 
-func count[T any](slice []T, f func(T) bool) (count int) {
-	for _, s := range slice {
-		if f(s) {
-			count++
-		}
-	}
-	return
-}
-
 func main() {
 	filePath := "input.txt"
-	data, err := readTextFile(filePath)
+	data, err := utils.ReadTextFile(filePath)
 	if err != nil {
 		log.Fatalf("Failed to read file: %v", err)
 	}
