@@ -1,6 +1,7 @@
 package main
 
 import (
+	//"fmt"
 	"strings"
 	"strconv"
 )
@@ -36,16 +37,35 @@ func parseDataToLists(data string) ([][]int, error) {
 func countSafeReports(lists [][]int) int {
 	var count int
 
+	// for every report
 	for _, report := range lists {
-		if isSafe(report) {
+		// check whether report is safe
+		if reportIsSafe := isReportSafe(report); reportIsSafe {
 			count++
+		// if it's not
+		} else {
+			// for every index in report
+			for id := range report {
+				// make a copy of report without one of the levels
+				copyNumbers := make([]int, len(report))
+				copy(copyNumbers, report)
+				copyNumbers = append(copyNumbers[:id], copyNumbers[id+1:]...)
+				// check whether it's safe now
+				reportIsSafe = isReportSafe(copyNumbers)
+				if reportIsSafe {
+					break
+				}
+			}
+			if reportIsSafe {
+				count++
+			}
 		}
 	}
 
 	return count
 }
 
-func isSafe(report []int) bool {
+func isReportSafe(report []int) bool {
 	asc := false
 	// for every number in the report
 	for i := range (len(report) - 1) {
@@ -64,10 +84,10 @@ func isSafe(report []int) bool {
 			return false	
 		// previous differences were negative and current is positive
 		} else if !asc && diff <= 0 {
-			return false	
+			return false
 		// difference is greater than 3
 		} else if diff < -3 || diff > 3 {
-			return false	
+			return false
 		}
 	}
 
