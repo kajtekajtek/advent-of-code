@@ -14,5 +14,17 @@ func main() {
 		log.Fatalf("Failed to read file: %v", err)
 	}
 
-	fmt.Println(parseDataToNumberPairs(data))
+	// part 1
+
+	pairs, err := parseDataToIntegerPairs(data)
+	if err != nil {
+		log.Fatalf("Failed to parse data: %v", err)
+	}
+
+	var sum int
+	for _, pair := range pairs {
+		sum += pair[0] * pair[1]
+	}
+
+	fmt.Println(sum)
 }
