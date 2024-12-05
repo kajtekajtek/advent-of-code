@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	filePath := "input_test.txt"
+	filePath := "input.txt"
 	data, err := utils.ReadTextFile(filePath)
 	if err != nil {
 		log.Fatalf("Failed to read file: %v", err)
@@ -21,10 +21,14 @@ func main() {
 		log.Fatalf("Failed to parse data: %v", err)
 	}
 
-	var sum int
-	for _, pair := range pairs {
-		sum += pair[0] * pair[1]
+	fmt.Println(sumPairs(pairs))
+
+	// part 2
+
+	enabledPairs, err := parseEnabledDataToIntegerPairs(data)
+	if err != nil {
+		log.Fatalf("Failed to parse data: %v", err)
 	}
 
-	fmt.Println(sum)
+	fmt.Println(sumPairs(enabledPairs))
 }
