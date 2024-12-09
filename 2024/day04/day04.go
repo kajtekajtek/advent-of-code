@@ -37,17 +37,20 @@ func countWord(data, target string) int {
 	// for every cell in the grid
 	for r := range rows {
 		for c := range cols {
-			// for every direction
-			for _, dr := range dirs {
-				for _, dc := range dirs {
-					if dr == 0 && dc == 0 {
-						continue
-					}
-					if checkWord(r, c, dr, dc) {
-						count++
+			if grid[r][c] == target[0] {
+				// for every direction
+				for _, dr := range dirs {
+					for _, dc := range dirs {
+						if dr == 0 && dc == 0 {
+							continue
+						}
+						if checkWord(r, c, dr, dc) {
+							count++
+						}
 					}
 				}
 			}
+			
 		}
 	}
 	return count
