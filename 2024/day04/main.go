@@ -17,4 +17,6 @@ func main() {
 	// part 1
 	fmt.Println(countWord(data, "XMAS"))
 
+	// part 2
+	fmt.Println(countXWord(data, "MAS"))
 }
