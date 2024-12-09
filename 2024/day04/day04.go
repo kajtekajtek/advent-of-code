@@ -5,7 +5,7 @@ import (
 	"errors"
 )
 
-/* checkWord checks if the target is present in the grid
+/* checkWord checks if the target string is present in the grid
 	(r,c) - starting position
 	(dr, dc) - direction */
 var checkWord = func(target string, grid []string, r,c, dr, dc int) bool {
@@ -16,7 +16,7 @@ var checkWord = func(target string, grid []string, r,c, dr, dc int) bool {
 	for i := range len(target) {
 		// calculate the char's position	
 		nr, nc := r + i * dr, c + i * dc
-		// if the position is out of bounds
+		// if the position is in bounds
 		if 0 <= nr && nr < rows && 0 <= nc && nc < cols {
 			// append the char to the word
 			word += string(grid[nr][nc])
@@ -39,6 +39,7 @@ func countWord(data, target string) int {
 	// for every cell in the grid
 	for r := range rows {
 		for c := range cols {
+			// if the cell contains the first char of the target
 			if grid[r][c] == target[0] {
 				// for every direction
 				for _, dr := range dirs {
@@ -58,8 +59,8 @@ func countWord(data, target string) int {
 	return count
 }
 
-/* countXWord counts the number of times two words in the shape of an X 
-	appear in the grid */
+/* countXWord counts the number of times two target words in the shape 
+	of an X appear in the grid */
 func countXWord(data, target string) (int, error) {
 	if len(target) % 2 == 0 {
 		return -1, errors.New("Target word can't have an odd number")
@@ -104,6 +105,7 @@ func countXWord(data, target string) (int, error) {
 	// for every cell in the grid
 	for r := range rows {
 		for c := range cols {
+			// if the cell contains the middle char of the target
 			if grid[r][c] == midChar {
 				if checkXWord(r, c) {
 					count++
