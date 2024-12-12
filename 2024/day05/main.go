@@ -8,14 +8,18 @@ import (
 )
 
 func main() {
-	filePath := "input_test.txt"
+	filePath := "input.txt"
 	data, err := utils.ReadTextFile(filePath)
 	if err != nil {
 		log.Fatalf("Failed to read file: %v", err)
 	}
 
 	// part 1
-	rules, updates := parseData(data)
-	fmt.Println(rules)
-	fmt.Println(updates)
+	rules, updates, err := parseData(data)
+	if err != nil {
+		log.Fatalf("Failed to parse data: %v", err)
+	}
+
+	validUpdates := filterOutInvalidUpdates(rules, updates)
+	fmt.Println(sumMiddleNumbers(validUpdates))
 }
